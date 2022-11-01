@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useMemo, useState } from "react";
 import { DebounceInput } from "react-debounce-input";
 import { useNavigate } from "react-router-dom";
 import { Virtuoso } from "react-virtuoso";
@@ -10,6 +10,7 @@ export default function FirstGenPokemonPage() {
     const [nomePokemon, setNomePokemon] = useState('');
     const {data} = useGetFirstGenPokemonsQuery();
     const navigate = useNavigate();
+    const valorFiltrado = useMemo(() => data?.results.filter(({name}) => name.includes(nomePokemon)), [data?.results, nomePokemon]);
 
     return (
         <div>
@@ -29,10 +30,16 @@ export default function FirstGenPokemonPage() {
                 />
             </FirstGenPokemonPageHeader>
             <Virtuoso
-                style={{height : 400}}
-                data={data?.results}
+                style={{
+                    height: 1000,
+                    display:'flex',
+                    flexWrap:'wrap',
+                    justifyContent:'center',
+                    flexDirection:'row'
+                }}
+                data={valorFiltrado}
                 itemContent={(index) => {
-                    const pokemon = data?.results[index]?.name;
+                    const pokemon = valorFiltrado?.[index].name;
                     return(
                         <FirstGenPokemonPageContainer key={pokemon}>                               
                             <PokemonBox name={pokemon ?? ''}/>

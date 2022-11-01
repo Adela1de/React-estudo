@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { DebounceInput } from "react-debounce-input";
 import { useNavigate } from "react-router-dom";
 import { Virtuoso } from "react-virtuoso";
@@ -10,6 +10,7 @@ export default function SecondGenPokemonPage() {
     const [nomePokemon, setNomePokemon] = useState('');
     const {data} = useGetSecondGenPokemonsQuery();
     const navigate = useNavigate();
+    const valorFiltrado = useMemo(() => data?.results.filter(({name}) => name.includes(nomePokemon)), [data?.results, nomePokemon]);
 
     return (
         <div>
@@ -30,9 +31,9 @@ export default function SecondGenPokemonPage() {
             </SecondGenPokemonPageHeader>
             <Virtuoso
                 style={{height : 400}}
-                data={data?.results}
+                data={valorFiltrado}
                 itemContent={(index) => {
-                    const pokemon = data?.results[index]?.name;
+                    const pokemon = valorFiltrado?.[index].name;
                     return (
                         <SecondGenPokemonPageContainer key={pokemon}>
                             <PokemonBox name={pokemon ?? ''}/>

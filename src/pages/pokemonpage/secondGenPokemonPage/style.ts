@@ -6,6 +6,6 @@ export const SecondGenPokemonPageContainer = styled.div`
     display: inline-block;
     vertical-align: middle;
 `
-export const SecondGenPokemonPageHeader = styled.button`
+export const SecondGenPokemonPageHeader = styled.div`
     width: 100%;
 `

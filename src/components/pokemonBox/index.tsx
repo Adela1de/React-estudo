@@ -1,6 +1,4 @@
-import React from "react";
 import { useGetPokemonByNameQuery } from "../../services/pokemon";
-import IPokemon from "../../types/pokemon";
 import { ContainerSpan, PokemonBoxContainer, PokemonBoxContainerImg } from "./style";
 
 interface IProps {
