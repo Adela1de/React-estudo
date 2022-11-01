@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { DebounceInput } from "react-debounce-input";
 import { useNavigate } from "react-router-dom";
+import { Virtuoso } from "react-virtuoso";
 import PokemonBox from "../../../components/pokemonBox";
 import { useGetFirstGenPokemonsQuery } from "../../../services/pokemon";
 import { FirstGenPokemonPageContainer, FirstGenPokemonPageHeader } from "./style";
@@ -27,15 +28,18 @@ export default function FirstGenPokemonPage() {
                     value={nomePokemon}
                 />
             </FirstGenPokemonPageHeader>
-            { 
-                data?.results
-                ?.filter((pokemon) => pokemon.name.includes(nomePokemon))
-                ?.map((pokemon) => (
-                    <FirstGenPokemonPageContainer key={pokemon?.name}>                               
-                        <PokemonBox name={pokemon?.name}/>
-                    </FirstGenPokemonPageContainer>
-                ))
-            }
+            <Virtuoso
+                style={{height : 400}}
+                data={data?.results}
+                itemContent={(index) => {
+                    const pokemon = data?.results[index]?.name;
+                    return(
+                        <FirstGenPokemonPageContainer key={pokemon}>                               
+                            <PokemonBox name={pokemon ?? ''}/>
+                        </FirstGenPokemonPageContainer>
+                    )
+                }}
+            />
         </div>
     );
 }
