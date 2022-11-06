@@ -3,18 +3,20 @@ import { DebounceInput } from "react-debounce-input";
 import { useNavigate } from "react-router-dom";
 import { Virtuoso } from "react-virtuoso";
 import PokemonBox from "../../../components/pokemonBox";
-import { useGetFirstGenPokemonsQuery } from "../../../services/pokemon";
-import { FirstGenPokemonPageContainer, FirstGenPokemonPageHeader } from "./style";
+import { useGetAllPokemonsQuery } from "../../../services/pokemon";
+import { AllPokemonsPageContainer, AllPokemonsPageHeader } from "./style";
 
-export default function FirstGenPokemonPage() {
-    const [nomePokemon, setNomePokemon] = useState('');
-    const {data} = useGetFirstGenPokemonsQuery();
+
+export default function AllPokemonsPage() {
     const navigate = useNavigate();
-    const valorFiltrado = useMemo(() => data?.results.filter(({name}) => name.includes(nomePokemon)), [data?.results, nomePokemon]);
-
+    const {data} = useGetAllPokemonsQuery();
+    const [nomePokemon, setNomePokemon] = useState('');
+    const valorFiltrado = useMemo(() => data?.results.filter(({name}) => name.includes(nomePokemon)), [data?.results, nomePokemon])
+    
+    
     return (
         <div>
-            <FirstGenPokemonPageHeader>
+            <AllPokemonsPageHeader>
                 <button onClick={() => navigate("/")}>Voltar à home</button>
                 <label htmlFor="fname">Filtro por nome:  </label>
                 <DebounceInput
@@ -28,7 +30,7 @@ export default function FirstGenPokemonPage() {
                     name="name"
                     value={nomePokemon}
                 />
-            </FirstGenPokemonPageHeader>
+            </AllPokemonsPageHeader>
             <Virtuoso
                 style={{
                     height: 1000,
@@ -41,12 +43,12 @@ export default function FirstGenPokemonPage() {
                 itemContent={(index) => {
                     const pokemon = valorFiltrado?.[index].name;
                     return(
-                        <FirstGenPokemonPageContainer key={pokemon}>                               
+                        <AllPokemonsPageContainer key={pokemon}>                               
                             <PokemonBox name={pokemon ?? ''}/>
-                        </FirstGenPokemonPageContainer>
+                        </AllPokemonsPageContainer>
                     )
                 }}
             />
         </div>
-    );
+    )
 }

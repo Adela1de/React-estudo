@@ -16,13 +16,17 @@ export const pokemonApi = createApi({
     getSecondGenPokemons: builder.query<IPokemonQuery, void>({
       query: () => `pokemon?limit=100&offset=151`
     }),
+    getAllPokemons: builder.query<IPokemonQuery, void>({
+      query: () => `pokemon?limit=890`
+    }),
   }),
 });
 
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
-export const { 
+export const {
   useGetPokemonByNameQuery, 
   useGetFirstGenPokemonsQuery,
   useGetSecondGenPokemonsQuery,
+  useGetAllPokemonsQuery,
 } = pokemonApi;
