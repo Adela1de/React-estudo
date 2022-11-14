@@ -33,9 +33,8 @@ export default function FirstGenPokemonPage() {
                 style={{
                     height: 1000,
                     display:'flex',
-                    flexWrap:'wrap',
-                    justifyContent:'center',
-                    flexDirection:'row'
+                    fill:'Menu',
+                    lineBreak: "auto",
                 }}
                 data={valorFiltrado}
                 itemContent={(index) => {

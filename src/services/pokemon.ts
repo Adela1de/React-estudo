@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import Pokemon from '../types/pokemon';
+import Pokemon, { IPokemonType } from '../types/pokemon';
 import IPokemonQuery from '../types/pokemonQuery';
 
 // Define a service using a base URL and expected endpoints
@@ -14,10 +14,13 @@ export const pokemonApi = createApi({
       query: () => `pokemon?limit=151`,
     }),
     getSecondGenPokemons: builder.query<IPokemonQuery, void>({
-      query: () => `pokemon?limit=100&offset=151`
+      query: () => `pokemon?limit=100&offset=151`,
     }),
     getAllPokemons: builder.query<IPokemonQuery, void>({
-      query: () => `pokemon?limit=890`
+      query: () => `pokemon?limit=890`,
+    }),
+    getAllTypes: builder.query<IPokemonType[], void>({
+      query: () => `type?limit=18`,
     }),
   }),
 });
@@ -29,4 +32,5 @@ export const {
   useGetFirstGenPokemonsQuery,
   useGetSecondGenPokemonsQuery,
   useGetAllPokemonsQuery,
+  useGetAllTypesQuery,
 } = pokemonApi;

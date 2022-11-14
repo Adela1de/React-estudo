@@ -1,19 +1,21 @@
+import { ListItem } from "@mui/material";
+import React from "react";
 import { useMemo, useState } from "react";
 import { DebounceInput } from "react-debounce-input";
 import { useNavigate } from "react-router-dom";
-import { Virtuoso } from "react-virtuoso";
+import { VirtuosoGrid } from "react-virtuoso";
 import PokemonBox from "../../../components/pokemonBox";
 import { useGetAllPokemonsQuery } from "../../../services/pokemon";
-import { AllPokemonsPageContainer, AllPokemonsPageHeader } from "./style";
+import { AllPokemonsPageContainer, AllPokemonsPageHeader, ItemWrapper, ListContainer } from "./style";
 
 
 export default function AllPokemonsPage() {
     const navigate = useNavigate();
     const {data} = useGetAllPokemonsQuery();
     const [nomePokemon, setNomePokemon] = useState('');
-    const valorFiltrado = useMemo(() => data?.results.filter(({name}) => name.includes(nomePokemon)), [data?.results, nomePokemon])
+    const valorFiltrado = useMemo(() => data?.results.filter(({name}) => name.includes(nomePokemon)), [data?.results, nomePokemon]);
     
-    
+
     return (
         <div>
             <AllPokemonsPageHeader>
@@ -31,22 +33,35 @@ export default function AllPokemonsPage() {
                     value={nomePokemon}
                 />
             </AllPokemonsPageHeader>
-            <Virtuoso
+            <VirtuosoGrid
                 style={{
-                    height: 1000,
-                    display:'flex',
-                    flexWrap:'wrap',
-                    justifyContent:'center',
-                    flexDirection:'row'
+                    height:1000,
                 }}
-                data={valorFiltrado}
+                totalCount={10000}
+                overscan={200}
+                components={{
+                    Item: AllPokemonsPageContainer,
+                    List: ListContainer,
+                    ScrollSeekPlaceholder:(() => {
+                        return (
+                        <AllPokemonsPageContainer>
+                            <PokemonBox name={'Carregando'}></PokemonBox>    
+                        </AllPokemonsPageContainer>
+                        )
+                    }),
+                }}
                 itemContent={(index) => {
                     const pokemon = valorFiltrado?.[index].name;
-                    return(
-                        <AllPokemonsPageContainer key={pokemon}>                               
-                            <PokemonBox name={pokemon ?? ''}/>
-                        </AllPokemonsPageContainer>
+                    return (
+                        <ItemWrapper>
+                            <PokemonBox name={pokemon ?? ''}></PokemonBox>
+                        </ItemWrapper>
                     )
+                }}
+                scrollSeekConfiguration={{
+                    enter: velocity => Math.abs(velocity) > 200,
+                    exit: velocity => Math.abs(velocity) < 30,
+                    change: (_, range) => console.log({ range }),
                 }}
             />
         </div>
